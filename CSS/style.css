@@ -1,0 +1,46 @@
+.container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    background-color: darkslategray;
+    border: 1px solid dimgray;
+    padding: 10px;
+}
+
+.container div {
+    background-color: darkslategrey;
+    padding: 3px;
+    font-size: 40px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+}
+
+.inputContainer {
+    background-color:darkslategray;
+    padding: 15px;
+
+}
+
+.inputContainer div {
+    background-color: darkseagreen;
+    color: white;
+    border: 1px solid darkgray;
+    padding: 30px;
+    font-size: 40px;
+    text-align: right;
+}
+
+html, body {
+    height: 100%;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    display: table-cell;
+    vertical-align: middle;
+    background-color: black;
+}
