@@ -1,75 +1,197 @@
-let result;
-let answerBox = [];
-let i = -1
-let stringBox = ''
-let regex = new RegExp("^([-+/*]\d+(\.\d+)?)*");
-let flag = regex.test(stringBox)
-let intBox = 0
-function addNum(value) {
-    answerBox.push(value)
-    unseperated = answerBox.join()
-    stringBox = answerBox.join('')
-    document.getElementById('inputBox').innerHTML = stringBox;
-    i++
-    console.log(answerBox, i, stringBox, flag)
+let numbers = ''
+let numArray = []
+let numArrayInt = []
+let display = '';
+let calculateArr = []
+let bracketCount = 0;
+let result = 0;
+
+function addNum(num) {
+    display += num;
+    numbers += num
+    document.getElementById('inputBox').innerHTML = display
+    console.log('display: ' + display,'calculation array: ' + calculateArr, 'numbers: ' + numbers, 'numArray:  ' + numArray)
 }
 
+function backspace() {
+    display = display.slice(0, -1);
+    display = display.trimEnd();
+    calculateArr.pop()
+    numArray.pop()
+    document.getElementById('inputBox').innerHTML = display
+    console.log('display: ' + display,'calculation array: ' + calculateArr, 'numbers: ' + numbers, 'numArray:  ' + numArray)
+}
 
 function clearAll() {
+    numbers = ''
+    numArray = []
+    numArrayInt = []
+    display = '';
+    calculateArr = []
+    bracketCount = 0;
+    result = 0;
     document.getElementById('inputBox').innerHTML = ''
-    answerBox = []
-    unseperated = answerBox.join()
-    stringBox = answerBox.join('')
-    i = -1
-    console.log(answerBox, i, stringBox, flag)
-}
-function backspace() {
-    answerBox.splice(i,1)
-    unseperated = answerBox.join()
-    stringBox = answerBox.join('')
-    i = i - 1
-    if (i < -1) {
-        i = -1
-    }
-    document.getElementById('inputBox').innerHTML = stringBox;
-    console.log(answerBox, i, stringBox, flag)
+    console.log('display: ' + display,'calculation array: ' + calculateArr, 'numbers: ' + numbers, 'numArray:  ' + numArray)
 }
 
 function Add() {
-    intBox = parseInt(stringBox)
-    flag = regex.test(intBox)
-
-    if (regex.test(stringBox)) {
-        i++
-        answerBox.push(' + ')
-        stringBox = answerBox.join('')
-        document.getElementById('inputBox').innerHTML = stringBox;
-    }
-    else {
-        console.log('+ already exists')
-    }
-
-    console.log(answerBox, i, stringBox, flag)
+    numArray.push(numbers)
+    numbers = '';
+    display += ' + '
+    calculateArr.push('+')
+    document.getElementById('inputBox').innerHTML = display
+    console.log('display: ' + display,'calculation array: ' + calculateArr, 'numbers: ' + numbers, 'numArray:  ' + numArray)
 }
 
 function Subtract() {
-    intBox = parseInt(stringBox)
-    flag = regex.test(intBox)
+    numArray.push(numbers)
+    numbers = '';
+    display += ' - '
+    calculateArr.push('-')
+    document.getElementById('inputBox').innerHTML = display
+    console.log('display: ' + display,'calculation array: ' + calculateArr, 'numbers: ' + numbers, 'numArray:  ' + numArray)
+}
 
-    if (regex.test(stringBox)) {
-        i++
-        stringBox = answerBox.join('')
-        document.getElementById('inputBox').innerHTML = stringBox;
-    }
-    else {
-        console.log('- already exists')
-    }
+function Percent() {
+    numArray.push(numbers)
+    numbers = '';
+    display += '% '
+    calculateArr.push('%')
+    document.getElementById('inputBox').innerHTML = display
+    console.log('display: ' + display,'calculation array: ' + calculateArr, 'numbers: ' + numbers, 'numArray:  ' + numArray)
+}
 
-    console.log(answerBox, i, stringBox, flag)
+function Divide() {
+    numArray.push(numbers)
+    numbers = '';
+    display += ' ÷ '
+    calculateArr.push('/')
+    document.getElementById('inputBox').innerHTML = display
+    console.log('display: ' + display,'calculation array: ' + calculateArr, 'numbers: ' + numbers, 'numArray:  ' + numArray)
+}
+
+function Multiply() {
+    numArray.push(numbers)
+    numbers = '';
+    display += ' x '
+    calculateArr.push('*')
+    document.getElementById('inputBox').innerHTML = display
+    console.log('display: ' + display,'calculation array: ' + calculateArr, 'numbers: ' + numbers, 'numArray:  ' + numArray)
+}
+
+function Brackets() {
+    bracketCount++
+    if (bracketCount % 2) {
+        display += '('
+        calculateArr.push('(')
+    } else {
+        display += ')'
+        calculateArr.push(')')
+    }
+    document.getElementById('inputBox').innerHTML = display
+    console.log('display: ' + display, 'calculation array: ' + calculateArr, 'numbers: ' + numbers, 'numArray:  ' + numArray)
 }
 
 
-
-function Equals() {
+function Calculate() {
+    numArray.push(numbers)
     
+    for (let i = 0; i < numArray.length; i++) {
+        numArrayInt.push(parseFloat(numArray[i]))
+    }
+
+    for (let i = 0; i < calculateArr.length; i++) {
+
+        if (calculateArr[i] == '(') {
+
+        }
+
+        if (calculateArr[i] == '%') {
+            if (calculateArr[i] == calculateArr[i - 1]) {
+                result %= numArrayInt[i]
+                numArrayInt.splice(i-1,1,result)
+            } else {
+                result = numArrayInt[i] % numArrayInt[i + 1]
+                numArrayInt.splice(i,1,result)
+            }
+            result %= result
+        }
+
+        if (calculateArr[i] == '*') {
+            result = 1
+            if (calculateArr[i] == calculateArr[i - 1]) {
+                result *= numArrayInt[i]
+                numArrayInt.splice(i-1,1,result)
+            } else {
+                result = numArrayInt[i] * numArrayInt[i + 1]
+                numArrayInt.splice(i,1,result)
+            }
+            result = result
+        }
+
+
+
+        if (calculateArr[i] == '/') {
+            result = 1
+            if (calculateArr[i] == calculateArr[i - 1]) {
+                result /= numArrayInt[i]
+                numArrayInt.splice(i-1,1,result)
+            } else {
+                result = numArrayInt[i] / numArrayInt[i+1]
+                numArrayInt.splice(i,1,result)
+            }
+            result /= result
+        }
+
+
+        if (calculateArr[i] == '+') {
+            if (calculateArr[i] == calculateArr[i - 1]) {
+                result += numArrayInt[i]
+                numArrayInt.splice(i-1,1,result)
+            } else {
+                result = numArrayInt[i] + numArrayInt[i + 1]
+                    .splice(i,1,result)
+            }
+            result += result
+        }
+
+
+        if (calculateArr[i] == '-') {
+            if (calculateArr[i] == calculateArr[i - 1]) {
+                result -= numArrayInt[i]
+                numArrayInt.splice(i-1,1,result)
+            } else {
+                result = numArrayInt[i] - numArrayInt[i + 1]
+                numArrayInt.splice(i,1,result)
+            }
+            result = result
+        }
+        console.log(numArrayInt[i] + ' ' + calculateArr[i] + ' ' + numArrayInt[i+1] + ' = ' + result, i, numArrayInt)
+        
+    }
+    document.getElementById('inputBox').innerHTML = '= ' + numArrayInt[0]
+    console.log('display: ' + display, 'calculation array: ' + calculateArr, 'numbers: ' + numbers, 'numArray:  ' + numArray, 'Result: ' + result)
+}
+let order = [];
+function Pemdas() {
+    for (let i = 0; i < calculateArr.length; i++) {
+        if (calculateArr[i] == '(') {
+            order.push('(')
+        }
+        if (calculateArr[i] == '*') {
+            order.push('*')
+        }
+        if (calculateArr[i] == '/') {
+            order.push('/')
+        }
+        if (calculateArr[i] == '%') {
+            order.push('%')
+        }
+        if (calculateArr[i] == '+') {
+            order.push('+')
+        }
+        if (calculateArr[i] == '-') {
+            order.push('-')
+        }
+    }
 }
